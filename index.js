@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -17,6 +18,7 @@ async function run(){
     try{
         await client.connect();
         const serviceCollection = client.db('leptop_tools').collection('services');
+        const userCollection = client.db('leptop_tools').collection('users');
 
         app.get('/service', async(req, res)=> {
             const query = {};
@@ -25,12 +27,26 @@ async function run(){
             res.send(services)
         });
 
-        app.get('/service/:serviceId', async(req, res) => {
-            const id = req.params.id;
+        app.get('/singleProduct', async(req, res) => {
+            const id = req.query.id
             const query = {_id: ObjectId(id)};
+            console.log(id)
             const service = await serviceCollection.findOne(query);
             res.send(service);
         });
+
+        app.put('/user/:email', async (req, res) => {
+          const email = req.params.email;
+          const user = req.body;
+          const filter = {email: email};
+          const options = {upsert: true};
+          const updateDoc = {
+            $set: user,
+          }
+
+          const result = await userCollection.updateOne(filter, updateDoc, options);
+          res.send(result);
+        })
 
     }
     finally{
