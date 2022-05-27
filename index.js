@@ -3,6 +3,7 @@ const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const { query } = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -19,6 +20,7 @@ async function run(){
         await client.connect();
         const serviceCollection = client.db('leptop_tools').collection('services');
         const userCollection = client.db('leptop_tools').collection('users');
+        const bookCollection = client.db('leptop_tools').collection('books');
 
         app.get('/service', async(req, res)=> {
             const query = {};
@@ -27,6 +29,8 @@ async function run(){
             res.send(services)
         });
 
+
+
         app.get('/singleProduct', async(req, res) => {
             const id = req.query.id
             const query = {_id: ObjectId(id)};
@@ -34,6 +38,40 @@ async function run(){
             const service = await serviceCollection.findOne(query);
             res.send(service);
         });
+  
+         app.post('/book', async(req, res)=> {
+           const book = req.body;
+           const result=  await bookCollection.insertOne(book) 
+           res.send(result);
+           
+         })
+
+        app.get('/user', async(req, res) => {
+          const users = await userCollection.find().toArray();
+          res.send(users);
+        })
+
+        app.put('/user/admin/:email', async (req, res) => {
+          const email = req.params.email;
+          const filter = {email: email};
+          const updateDoc = {
+            $set: {role: 'admin'},
+          };
+
+          const result = await userCollection.updateOne(filter, updateDoc);
+          res.send(result);
+      
+        })
+
+      
+
+        app.get('/book/:email', async(req,res)=> {
+          const email = req.params.email;
+          const query = {email: email};
+          const result = await bookCollection.find(query).toArray();
+          res.send(result);
+        });
+
 
         app.put('/user/:email', async (req, res) => {
           const email = req.params.email;
@@ -45,7 +83,8 @@ async function run(){
           }
 
           const result = await userCollection.updateOne(filter, updateDoc, options);
-          res.send(result);
+          const token = jwt.sign({email: email}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1hr'})
+          res.send({result, token});
         })
 
     }
