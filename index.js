@@ -65,13 +65,20 @@ async function run(){
            
          });
 
-        //  add review
+        //  post review
         app.post('/review',  async(req, res)=> {
           const review = req.body;
           const result=  await reviewCollection.insertOne(review) 
           res.send(result);
           
         });
+        // img
+        app.post('/upload', verifyJWT,  async(req, res)=> {
+          const service = req.body;
+          const result=  await serviceCollection.insertOne(service) 
+          res.send(result);
+          
+        })
 
           // add email
         app.get('/review/:email', async(req,res)=> {
@@ -115,6 +122,28 @@ async function run(){
         const isAdmin = user.role === 'admin';
         res.send({admin: isAdmin});
       })
+
+      // get user
+      app.get('/profile/:email', async(req, res)=>{
+        const email = req.params.email;
+        const query = { email: email};
+        const result = await userCollection.findOne(query);
+        res.send(result);
+      })
+
+      // update user profile
+      app.put('/updateprofile/:email', async (req, res) => {
+        const email = req.params.email;
+        const newProfile = req.body;
+        const filter = { email: email };
+        const updateProfile = {
+            $set: newProfile,
+        }
+        const result = await userCollection.updateOne(filter, updateProfile);
+        res.send(result);
+
+    })
+
 
 
         app.get('/user', async(req, res) => {
