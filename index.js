@@ -47,8 +47,14 @@ async function run(){
             const services = await cursor.toArray();
             res.send(services)
         });
-
-
+         // all booking
+        app.get('/allbooking', async(req, res)=> {
+          const query = {};
+          const cursor = bookCollection.find(query);
+          const booking = await cursor.toArray();
+          res.send(booking)
+      });
+ 
 
         app.get('/singleProduct', async(req, res) => {
             const id = req.query.id
@@ -129,7 +135,7 @@ async function run(){
         const query = { email: email};
         const result = await userCollection.findOne(query);
         res.send(result);
-      })
+      });
 
       // update user profile
       app.put('/updateprofile/:email', async (req, res) => {
@@ -171,7 +177,13 @@ async function run(){
           res.send(result);
         })
 
-      
+        // delete product
+        app.delete('/productDelete/:id', verifyJWT, async(req, res)=>{
+          const id = req.params.id;
+          const query = {_id: ObjectId(id)};
+          const result = await serviceCollection.deleteOne(query);
+          res.send(result);
+        });
 
         app.get('/book/:email', async(req,res)=> {
           const email = req.params.email;
