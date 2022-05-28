@@ -102,7 +102,6 @@ async function run(){
         })
 
       //  admin
-
       app.put('/user/admin/:email', verifyJWT, async (req, res) => {
         const email = req.params.email;
         const requester = req.decoded?.email;
@@ -152,12 +151,14 @@ async function run(){
     })
 
 
-
+        // get user 
         app.get('/user', async(req, res) => {
           const users = await userCollection.find().toArray();
           res.send(users);
         })
 
+
+        // user email
         app.put('/user/admin/:email', verifyJWT,  async (req, res) => {
           const email = req.params.email;
           const filter = {email: email};
