@@ -1,4 +1,4 @@
-# Leptop Tools bd (Server site) 
+# Leptop Tools bd 
 
 ## [Private repo link](https://leptop-tools-bd.web.app/).
 click here to create private repo: https://leptop-tools-bd.web.app/
@@ -21,15 +21,14 @@ click here to create private repo: https://leptop-tools-bd.web.app/
 
 ### `Technologies`
 - React
-- Firebase
-- React Router
+- node.js
 - React Firebase Hooks
 - Daisyui
 - Axios
 - React Query
 - React hook form
 - React-Toastify
-- html, css
+
 
 
 
