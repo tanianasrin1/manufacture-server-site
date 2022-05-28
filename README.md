@@ -3,7 +3,7 @@
 ## [Private repo link](https://leptop-tools-bd.web.app/).
 click here to create private repo: https://leptop-tools-bd.web.app/
 
-## Available Scripts
+## Server site
 
 
 ### `Project Feature`
