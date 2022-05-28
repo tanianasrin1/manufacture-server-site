@@ -22,6 +22,7 @@ click here to create private repo: https://leptop-tools-bd.web.app/
 ### `Technologies`
 - React
 - node.js
+- mongodb
 - React Firebase Hooks
 - Daisyui
 - Axios
